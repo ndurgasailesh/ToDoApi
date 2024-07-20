@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "AxZeA1oahdsNVKfLL8iCzsBI25yjxNtwmdTCKLS3jmo=",
+  "Source": "TaskScheduler",
+  "BasePath": "_content/TaskScheduler",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
