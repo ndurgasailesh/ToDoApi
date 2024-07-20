@@ -23,7 +23,7 @@ namespace TaskScheduler.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> CreateTaskList(TaskListDto objTaskItem)
+        public async Task<bool> CreateTaskListAsync(TaskListDto objTaskItem)
         {
 
        
@@ -43,7 +43,7 @@ namespace TaskScheduler.Services
             return false;
         }
 
-        public async Task<bool> DeleteTask(int taskId)
+        public async Task<bool> DeleteTaskAsync(int taskId)
         {
                 if (taskId > 0)
                 {
@@ -63,28 +63,26 @@ namespace TaskScheduler.Services
         }
 
 
-        public  IEnumerable<TaskListDto> GetUserTasks(string userId)
+        public  async Task<IEnumerable<TaskListDto>> GetUserTasksAsync(string userId)
         {
 
                 if (userId != null)
                 {
-                    var taskLists = _unitOfWork.TaskLists.GetUserTasks(userId);
+                    var taskLists = await _unitOfWork.TaskLists.GetUserTasksAsync(userId);
                     return taskLists;
                 } 
               return Enumerable.Empty<TaskListDto>();
               
         }
 
-
-
-        public  IEnumerable<TaskListDto> GetAllUserTasks()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUserTasksAsync()
         {
 
-                var taskLists = _unitOfWork.TaskLists.GetAllUserTasks();
+                var taskLists = await _unitOfWork.TaskLists.GetAllUserTasksAsync();
                 return taskLists;
         }
 
-        public async Task<TaskListDto?> GetTaskDetails(int taskId)
+        public async Task<TaskListDto?> GetTaskDetailsAsync(int taskId)
         {
 
                 if (taskId > 0)
@@ -98,7 +96,7 @@ namespace TaskScheduler.Services
             return null;
         }
 
-        public async Task<bool> UpdateTaskDetails(TaskListDto objTaskItem)
+        public async Task<bool> UpdateTaskDetailsAsync(TaskListDto objTaskItem)
         {
 
                 if (objTaskItem != null)

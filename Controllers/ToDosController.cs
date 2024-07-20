@@ -2,37 +2,39 @@
 using TaskScheduler.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using TaskScheduler.Services.IService;
+using TaskScheduler.Data.DBModels;
+using System.Collections;
 
 namespace TaskScheduler.Controllers
 {
 
-    [Authorize(Roles = "Admin")] 
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskListController : ControllerBase
+    public class ToDosController : ControllerBase
     {
 
         public readonly ITaskListService _taskListService;
 
 
 
-        public TaskListController( ITaskListService taskListService
+        public ToDosController( ITaskListService taskListService
              )
         {
             this._taskListService = taskListService;
         }
-       
 
-        [Route("user")]
+        [Authorize(Roles = "Admin,User")]
+        [Route("id")]
         [HttpGet]
-        public  IActionResult GetUserTasks()
+        public async Task<IActionResult> GetUserTasksAsync()
         {
+
             string userId = string.Empty;
             if (User != null && User.FindFirst("userId") != null)
             {
                 userId = User.FindFirst("userId")!.Value;
             }
-            List<TaskListDto> taskLists = _taskListService.GetUserTasks(userId!).ToList();
+            IEnumerable<TaskListDto> taskLists = await _taskListService.GetUserTasksAsync(userId!);
 
             if (taskLists == null)
             {
@@ -41,24 +43,22 @@ namespace TaskScheduler.Controllers
             return Ok(taskLists);
         }
 
-        [Route("user/all")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult GetAllUserTasks()
+        public async Task<IActionResult> GetAllUserTasksAsync()
         {
           
-            List<TaskListDto> taskLists = _taskListService.GetAllUserTasks().ToList();
+            var taskLists = await _taskListService.GetAllUserTasksAsync();
 
-            if (taskLists == null)
+            if (taskLists == null || !taskLists.Any())
             {
                 return NotFound("TaskList not found");
             }
             return Ok(taskLists);
         }
 
-
-
         [HttpPost]
-        public IActionResult Post([FromBody] TaskListDto objTasklist)
+        public async Task<IActionResult> Post([FromBody] TaskListDto objTasklist)
         {
             if (objTasklist == null)
             {
@@ -69,40 +69,41 @@ namespace TaskScheduler.Controllers
                 objTasklist.UserId = User.FindFirst("userId")!.Value;
             }
 
-            _taskListService.CreateTaskList(objTasklist);
+            await _taskListService.CreateTaskListAsync(objTasklist);
             return Ok(objTasklist);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] TaskListDto taskList)
+        public async Task<IActionResult> Put(int id, [FromBody] TaskListDto taskList)
         {
- 
-            TaskListDto? dbTaskList = _taskListService.GetTaskDetails(id).Result;
-            if (dbTaskList == null)
-            {
-                return NotFound("TaskList not found");
-            }
             if (taskList == null)
             {
                 return BadRequest("TaskList is empty");
             }
-            taskList.Id = id;
 
-            _taskListService.UpdateTaskDetails(taskList);
-            //_taskListDataRepo.Update(dbTaskList, taskList);
-            return Ok(dbTaskList);
-        }
+            TaskListDto? dbTaskList = await _taskListService.GetTaskDetailsAsync(id);
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            TaskListDto? dbTaskList = _taskListService.GetTaskDetails(id).Result;
             if (dbTaskList == null)
             {
                 return NotFound("TaskList not found");
             }
-            _taskListService.DeleteTask(id);
-            //_taskListDataRepo.Delete(dbTaskList);
+          
+            taskList.Id = id;
+
+            await _taskListService.UpdateTaskDetailsAsync(taskList);
+
+            return Ok(dbTaskList);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            TaskListDto? dbTaskList = await _taskListService.GetTaskDetailsAsync(id);
+            if (dbTaskList == null)
+            {
+                return NotFound("TaskList not found");
+            }
+            await _taskListService.DeleteTaskAsync(id);
             return NoContent();
         }
     }

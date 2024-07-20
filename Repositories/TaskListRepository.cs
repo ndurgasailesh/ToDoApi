@@ -19,37 +19,47 @@ namespace TaskScheduler.Repositories
            _mapper = mapper;
         }
 
-        public TaskListRepository(AppDbContext context) : base(context)
-        {
-        }
+        //public TaskListRepository(AppDbContext context) : base(context)
+        //{
+        //}
 
-        public IEnumerable<TaskListDto> GetUserTasks(string userId)
+        public async Task<IEnumerable<TaskListDto?>> GetUserTasksAsync(string userId)
         {
 
-             var taskList = this._dbContext.Users.Include(c => c.TaskLists).First(u => u.Id == userId).TaskLists.Select(c => _mapper.Map<TaskListDto>(c));
-            return taskList ;
+            var user = await this._dbContext.Users
+                               .Include(u => u.TaskLists)
+                               .FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null || user.TaskLists == null || !user.TaskLists.Any())
+            {
+                return Enumerable.Empty<TaskListDto>();
+            }
+
+            var taskListDtos =  user.TaskLists.Select(c => _mapper.Map<TaskListDto>(c));
+            return taskListDtos;
         
         }
 
-        public IEnumerable<TaskListDto> GetAllUserTasks()
+        public async Task<IEnumerable<ApplicationUser>> GetAllUserTasksAsync()
         {
 
-            var taskList = this._dbContext.Users.Include(c => c.TaskLists).Select(c => _mapper.Map<TaskListDto>(c)).ToList();
-            return taskList;
+            var taskLists = await this._dbContext.Users.AsQueryable().Include(c => c.TaskLists).ToListAsync();
+         
+            return taskLists;
 
         }
 
-        public TaskListDto? GetTaskDetails(int taskId)
+        public  async Task<TaskListDto?> GetTaskDetailsAsync(int taskId)
         {
             if (taskId > 0)
             {
-                var taskDetails = _dbContext.TaskLists.FirstOrDefault(x => x.Id == taskId);
+                var taskDetails = await _dbContext.TaskLists.FirstOrDefaultAsync(x => x.Id == taskId);
                 if (taskDetails != null)
                 {
                     return _mapper.Map<TaskListDto>(taskDetails); ;
                 }
             }
-            return null;
+            return new TaskListDto();
         }
 
        

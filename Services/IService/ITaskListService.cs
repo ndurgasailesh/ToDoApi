@@ -5,17 +5,17 @@ namespace TaskScheduler.Services.IService
 {
     public interface ITaskListService
     {
-        Task<bool> CreateTaskList(TaskListDto objTaskItem);
+        Task<bool> CreateTaskListAsync(TaskListDto objTaskItem);
 
-        IEnumerable<TaskListDto> GetUserTasks(string userId);
+        Task<IEnumerable<TaskListDto>> GetUserTasksAsync(string userId);
 
-        IEnumerable<TaskListDto> GetAllUserTasks();
+        Task<IEnumerable<ApplicationUser>> GetAllUserTasksAsync();
 
 
-        Task<TaskListDto?> GetTaskDetails(int taskId);
+        Task<TaskListDto?> GetTaskDetailsAsync(int taskId);
 
-        Task<bool> UpdateTaskDetails(TaskListDto objTaskItem);
+        Task<bool> UpdateTaskDetailsAsync(TaskListDto objTaskItem);
 
-        Task<bool> DeleteTask(int taskId);
+        Task<bool> DeleteTaskAsync(int taskId);
     }
 }

@@ -37,7 +37,7 @@ namespace TaskScheduler.DataRepoManager
             return _dbContext.SaveChanges();
         }
 
-        public AppDbContext DbContext { get { return _dbContext;} }
+        public AppDbContext DbContext { get { return _dbContext; } }
 
     }
 }

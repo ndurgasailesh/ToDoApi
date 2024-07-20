@@ -7,10 +7,10 @@ namespace TaskScheduler.Repository
     public interface ITaskListRepository : IDataRepository<TaskList>
     {
 
-        IEnumerable<TaskListDto> GetAllUserTasks();
+        Task<IEnumerable<ApplicationUser>> GetAllUserTasksAsync();
 
-        IEnumerable<TaskListDto> GetUserTasks(string userId);
+        Task<IEnumerable<TaskListDto>> GetUserTasksAsync(string userId);
 
-        TaskListDto? GetTaskDetails(int taskId);
+        Task<TaskListDto?> GetTaskDetailsAsync(int taskId);
     }
 }
