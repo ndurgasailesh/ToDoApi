@@ -12,13 +12,9 @@ namespace TaskScheduler.Controllers
     [ApiController]
     public class ToDosController : ControllerBase
     {
-
         public readonly ITaskListService _taskListService;
 
-
-
-        public ToDosController( ITaskListService taskListService
-             )
+        public ToDosController(ITaskListService taskListService)
         {
             this._taskListService = taskListService;
         }

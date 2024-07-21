@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\poc\\TaskScheduler\\TaskScheduler.csproj": {}
+    "C:\\Test\\ToDoApi\\TaskScheduler.csproj": {}
   },
   "projects": {
-    "C:\\poc\\TaskScheduler\\TaskScheduler.csproj": {
+    "C:\\Test\\ToDoApi\\TaskScheduler.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\poc\\TaskScheduler\\TaskScheduler.csproj",
+        "projectUniqueName": "C:\\Test\\ToDoApi\\TaskScheduler.csproj",
         "projectName": "TaskScheduler",
-        "projectPath": "C:\\poc\\TaskScheduler\\TaskScheduler.csproj",
+        "projectPath": "C:\\Test\\ToDoApi\\TaskScheduler.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
-        "outputPath": "C:\\poc\\TaskScheduler\\obj\\",
+        "outputPath": "C:\\Test\\ToDoApi\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HP\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -80,6 +80,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[8.0.3, )"
+            },
+            "Moq": {
+              "target": "Package",
+              "version": "[4.20.70, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
