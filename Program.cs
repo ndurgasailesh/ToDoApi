@@ -12,6 +12,7 @@ using TaskScheduler.Repository;
 using TaskScheduler.Repositories;
 using TaskScheduler.Services.IService;
 using TaskScheduler.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,8 @@ builder.Services.AddCors(options =>
         }));
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 
 var app = builder.Build();
